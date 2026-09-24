@@ -9,8 +9,9 @@ const countdownCaption = document.querySelector<HTMLParagraphElement>('#countdow
 const applyButton = document.querySelector<HTMLAnchorElement>('#apply-button')!;
 
 const APPLICATION_URL = 'https://startup.assam.gov.in/nesfic26/';
-const launchAudio = new Audio('/audio.mp3');
+const launchAudio = new Audio(`${window.location.origin}/audio.mp3`);
 launchAudio.preload = 'auto';
+launchAudio.volume = 1.0;
 const sleep = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 
 let running = false;
@@ -34,8 +35,10 @@ async function launch() {
   running = true;
   window.clearTimeout(redirectTimer);
 
+  launchAudio.pause();
   launchAudio.currentTime = 0;
-  void launchAudio.play().catch(() => {});
+  launchAudio.load();
+  void launchAudio.play().catch((error) => console.warn('NESFIC launch audio could not play:', error));
 
   launchButton.disabled = true;
   show(countdownScreen);
