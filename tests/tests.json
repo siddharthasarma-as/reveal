@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Complete 50-problem NESFIC reveal",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": ["NESFIC logo theme", "5-to-0 countdown", "10-to-0 countdown", "full-screen centered ribbon", "large moving scissor cursor", "clickable ribbon", "logo appears after ribbon cut", "cut ribbon halves separate from center", "box hidden until ribbon cut", "50 problem statement cards emerging from the box", "five-column grid"],
+    "description": "Verifies the main experience reveals all 50 source problem statements in the themed grid.",
+    "steps": ["Open the page", "Wait through the countdown and ribbon cut", "Observe the box open and the problem cards populate the grid"],
+    "expected": "The NESFIC-themed page reveals an opening box followed by all 50 problem statement cards in a responsive grid."
+  },
+  {
+    "name": "Industry and department grouping",
+    "viewport": "desktop",
+    "covers": ["10 industry statements", "40 department statements", "problem IDs", "issuing organisations and departments"],
+    "description": "Verifies the cards preserve the source ID and issuer grouping for the 10 industry and 40 department challenges.",
+    "steps": ["Wait for the final grid", "Inspect the first ten cards", "Inspect the remaining forty cards"],
+    "expected": "IND-01 through IND-10 are marked Industry and DPS-1 through DPS-40 are marked Department, with issuer information visible."
+  },
+  {
+    "name": "Responsive 50-card grid",
+    "viewport": "mobile",
+    "covers": ["mobile grid", "responsive card layout", "all 50 cards"],
+    "description": "Verifies the complete set remains accessible on a narrow viewport.",
+    "steps": ["Open the page on a mobile viewport", "Wait for the reveal", "Scroll through the cards"],
+    "expected": "The cards reflow to a single-column mobile grid and all 50 statements remain accessible without horizontal scrolling."
+  }
+]
