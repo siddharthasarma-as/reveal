@@ -254,7 +254,7 @@ button:focus-visible, a:focus-visible {
   bottom: 16%;
   margin: 0;
   color: var(--orange);
-  font-size: clamp(.8rem, 1.4vw, 1rem);
+  font-size: clamp(1rem, 2vw, 1.4rem);
   font-weight: 900;
   letter-spacing: .3em;
   white-space: pre-line;
@@ -463,7 +463,7 @@ button:focus-visible, a:focus-visible {
   .launch-content h1 { font-size: clamp(2.25rem, min(11vw, 7.2svh), 4.2rem); }
   .intro { margin-top: 12px; }
   .countdown-number { font-size: clamp(9rem, 42vw, 16rem); }
-  .countdown-caption { bottom: 20%; letter-spacing: .2em; }
+  .countdown-caption { bottom: 20%; font-size: clamp(1rem, 4.5vw, 1.25rem); letter-spacing: .2em; }
   .open-logo { width: min(245px, 65vw, 23svh); }
   .open-content h2 { font-size: clamp(2.8rem, min(15vw, 8svh), 5.8rem); }
   .open-copy { font-size: .88rem; }
