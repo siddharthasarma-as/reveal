@@ -118,11 +118,11 @@ async function launch() {
   show(countdownScreen);
 
   const steps: Array<[string, string]> = [
-    ['5', 'GET READY'],
-    ['4', 'THE MOMENT BEGINS'],
-    ['3', 'NORTH-EAST'],
-    ['2', 'SEVA FIRST'],
-    ['1', 'INNOVATION'],
+    ['5', 'GET\nREADY FOR'],
+    ['4', 'THE\nLAUNCH OF'],
+    ['3', 'NORTH\nEAST SEWA FIRST'],
+    ['2', 'INNOVATION\nCHALLENGE'],
+    ['1', '2026'],
   ];
 
   for (const [value, caption] of steps) {
