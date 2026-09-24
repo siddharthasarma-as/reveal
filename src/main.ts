@@ -33,8 +33,6 @@ function getAudioContext() {
   return audioContext;
 }
 
-// Explicitly unlock audio while still inside the Launch button's user gesture.
-// Waiting for resume() is important on browsers that initially suspend Web Audio.
 async function unlockAudio() {
   const context = getAudioContext();
   if (!context || !masterGain) return false;
@@ -43,7 +41,6 @@ async function unlockAudio() {
     await context.resume();
   }
 
-  // Audible confirmation pulse, deliberately short and low-volume.
   const oscillator = context.createOscillator();
   const gain = context.createGain();
   const now = context.currentTime;
@@ -90,15 +87,7 @@ function tone(
   oscillator.stop(end + 0.02);
 }
 
-function playCountdownTone(value: string) {
-  if (value === '0') {
-    // Ceremonial three-note fanfare for the opening moment.
-    tone(523.25, 0.20, 0, 0.30, 'sine');
-    tone(659.25, 0.20, 0.21, 0.30, 'sine');
-    tone(783.99, 0.48, 0.42, 0.34, 'sine');
-    return;
-  }
-
+function playCountdownTone() {
   // Strong PA/event-style double beep for each countdown number.
   tone(880, 0.16, 0, 0.28, 'square');
   tone(1320, 0.09, 0.18, 0.18, 'square');
@@ -115,7 +104,7 @@ function pulseCountdown(value: string, caption: string) {
   countdownNumber.classList.remove('pulse');
   void countdownNumber.offsetWidth;
   countdownNumber.classList.add('pulse');
-  playCountdownTone(value);
+  playCountdownTone();
 }
 
 async function launch() {
@@ -123,7 +112,6 @@ async function launch() {
   running = true;
   window.clearTimeout(redirectTimer);
 
-  // Unlock and fully resume audio before the first countdown beep.
   await unlockAudio();
 
   launchButton.disabled = true;
@@ -142,9 +130,9 @@ async function launch() {
     await sleep(900);
   }
 
-  pulseCountdown('0', 'OPENING NOW');
-  await sleep(1200);
-
+  // 1 is the final countdown number. There is deliberately no 0.
+  // Move straight to the opening reveal after the 1 beat.
+  await sleep(350);
   show(openScreen);
   document.title = 'Applications Now Open — NESFIC 2026';
 
