@@ -13,38 +13,63 @@ const sleep = (ms: number) => new Promise<void>((resolve) => window.setTimeout(r
 
 let running = false;
 let redirectTimer = 0;
-
-// The countdown sound is synthesized in-browser so there is no audio file to
-// fail to load on GitHub Pages. The first launch click also satisfies browser
-// autoplay policies by creating/resuming the AudioContext from a user gesture.
 let audioContext: AudioContext | null = null;
+let masterGain: GainNode | null = null;
 
 function getAudioContext() {
-  if (!audioContext) {
-    const AudioContextClass =
-      window.AudioContext ||
-      (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (audioContext) return audioContext;
 
-    if (!AudioContextClass) return null;
-    audioContext = new AudioContextClass();
-  }
+  const AudioContextClass =
+    window.AudioContext ||
+    (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
 
-  if (audioContext.state === 'suspended') {
-    void audioContext.resume();
-  }
+  if (!AudioContextClass) return null;
+
+  audioContext = new AudioContextClass();
+  masterGain = audioContext.createGain();
+  masterGain.gain.value = 0.28;
+  masterGain.connect(audioContext.destination);
 
   return audioContext;
+}
+
+// Explicitly unlock audio while still inside the Launch button's user gesture.
+// Waiting for resume() is important on browsers that initially suspend Web Audio.
+async function unlockAudio() {
+  const context = getAudioContext();
+  if (!context || !masterGain) return false;
+
+  if (context.state !== 'running') {
+    await context.resume();
+  }
+
+  // Audible confirmation pulse, deliberately short and low-volume.
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+  const now = context.currentTime;
+
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(660, now);
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.08, now + 0.008);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
+  oscillator.connect(gain);
+  gain.connect(masterGain);
+  oscillator.start(now);
+  oscillator.stop(now + 0.08);
+
+  return true;
 }
 
 function tone(
   frequency: number,
   duration: number,
   startDelay = 0,
-  volume = 0.075,
-  type: OscillatorType = 'sine',
+  volume = 0.24,
+  type: OscillatorType = 'square',
 ) {
   const context = getAudioContext();
-  if (!context) return;
+  if (!context || !masterGain || context.state !== 'running') return;
 
   const start = context.currentTime + startDelay;
   const end = start + duration;
@@ -54,30 +79,29 @@ function tone(
   oscillator.type = type;
   oscillator.frequency.setValueAtTime(frequency, start);
 
-  // Clean, restrained PA-style electronic beep: fast attack and soft release.
   gain.gain.setValueAtTime(0.0001, start);
-  gain.gain.exponentialRampToValueAtTime(volume, start + 0.012);
-  gain.gain.setValueAtTime(volume, Math.max(start + 0.012, end - 0.035));
+  gain.gain.exponentialRampToValueAtTime(volume, start + 0.008);
+  gain.gain.setValueAtTime(volume, Math.max(start + 0.008, end - 0.025));
   gain.gain.exponentialRampToValueAtTime(0.0001, end);
 
   oscillator.connect(gain);
-  gain.connect(context.destination);
+  gain.connect(masterGain);
   oscillator.start(start);
   oscillator.stop(end + 0.02);
 }
 
 function playCountdownTone(value: string) {
   if (value === '0') {
-    // Final ceremonial "opening" chime: three ascending notes.
-    tone(523.25, 0.18, 0, 0.09, 'sine');
-    tone(659.25, 0.18, 0.20, 0.09, 'sine');
-    tone(783.99, 0.34, 0.40, 0.11, 'sine');
+    // Ceremonial three-note fanfare for the opening moment.
+    tone(523.25, 0.20, 0, 0.30, 'sine');
+    tone(659.25, 0.20, 0.21, 0.30, 'sine');
+    tone(783.99, 0.48, 0.42, 0.34, 'sine');
     return;
   }
 
-  // Firm, identical countdown pulse for 5 → 1.
-  tone(880, 0.115, 0, 0.075, 'square');
-  tone(1320, 0.055, 0.125, 0.035, 'sine');
+  // Strong PA/event-style double beep for each countdown number.
+  tone(880, 0.16, 0, 0.28, 'square');
+  tone(1320, 0.09, 0.18, 0.18, 'square');
 }
 
 function show(screen: HTMLElement) {
@@ -99,8 +123,8 @@ async function launch() {
   running = true;
   window.clearTimeout(redirectTimer);
 
-  // Initialize audio immediately from the Launch button gesture.
-  getAudioContext();
+  // Unlock and fully resume audio before the first countdown beep.
+  await unlockAudio();
 
   launchButton.disabled = true;
   show(countdownScreen);
@@ -119,7 +143,7 @@ async function launch() {
   }
 
   pulseCountdown('0', 'OPENING NOW');
-  await sleep(1050);
+  await sleep(1200);
 
   show(openScreen);
   document.title = 'Applications Now Open — NESFIC 2026';
