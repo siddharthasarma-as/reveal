@@ -1,10 +1,10 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  // This site is deployed as a GitHub Pages project site at /reveal/.
-  // Using the project base prevents relative assets from escaping /reveal/
+  // This site is served from the custom domain nesfic.assamstartup.org.
+  // Root-relative assets are required for the custom-domain deployment.
   // when the page is opened without a trailing slash.
-  base: '/reveal/',
+  base: '/',
   build: {
     outDir: process.env.APPDEPLOY_VITE_OUT_DIR || 'dist',
     sourcemap:
