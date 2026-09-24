@@ -66,7 +66,7 @@ const problems: Problem[] = [
 const featuredIds = [
   'IND-01', 'IND-02', 'IND-03', 'IND-04', 'IND-05',
   'IND-06', 'IND-07', 'IND-08', 'IND-09', 'IND-10',
-  'DPS-01', 'DPS-02', 'DPS-05', 'DPS-08', 'DPS-11',
+  'DPS-1', 'DPS-2', 'DPS-5', 'DPS-8', 'DPS-11',
   'DPS-12', 'DPS-16', 'DPS-18', 'DPS-20', 'DPS-22',
   'DPS-23', 'DPS-30', 'DPS-31', 'DPS-36'
 ];
@@ -183,6 +183,8 @@ function waitForRibbonCut(): Promise<void> {
 let onKeyCut: (event: KeyboardEvent) => void;
 
 async function start() {
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
   replay.classList.remove('show');
   scene.classList.add('hidden');
   scene.classList.remove('cutting', 'logo-only');
@@ -247,4 +249,7 @@ async function start() {
 }
 
 replay.addEventListener('click', () => void start());
-void start();
+
+window.addEventListener('DOMContentLoaded', () => {
+  void start();
+});
