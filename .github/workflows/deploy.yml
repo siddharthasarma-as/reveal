@@ -29,6 +29,8 @@ jobs:
         run: npm install --fetch-retries=5 --fetch-retry-mintimeout=2000 --fetch-retry-maxtimeout=20000
       - name: Build
         run: npm run build
+      - name: Include launch audio
+        run: cp audio.mp3 dist/audio.mp3
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
