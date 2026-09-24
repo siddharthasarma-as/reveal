@@ -236,6 +236,8 @@ button:focus-visible, a:focus-visible {
   position: absolute;
   top: 16%;
   margin: 0;
+  font-size: clamp(1.4rem, 3.2vw, 2.4rem);
+  letter-spacing: .12em;
 }
 
 .countdown-number {
