@@ -98,22 +98,93 @@ function playTone(
   oscillator.stop(end + 0.03);
 }
 
+function drumHit(
+  startDelay: number,
+  frequency: number,
+  duration: number,
+  volume: number,
+  pitchDrop = 0,
+) {
+  const context = getAudioContext();
+  if (!context || !masterGain || context.state !== 'running') return;
+
+  const start = context.currentTime + startDelay;
+  const end = start + duration;
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(frequency, start);
+  oscillator.frequency.exponentialRampToValueAtTime(
+    Math.max(45, frequency - pitchDrop),
+    end,
+  );
+
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.exponentialRampToValueAtTime(volume, start + 0.008);
+  gain.gain.exponentialRampToValueAtTime(0.0001, end);
+
+  oscillator.connect(gain);
+  gain.connect(masterGain);
+  oscillator.start(start);
+  oscillator.stop(end + 0.02);
+}
+
+function pepaCall(
+  startDelay: number,
+  startFrequency: number,
+  endFrequency: number,
+  duration: number,
+  volume: number,
+) {
+  const context = getAudioContext();
+  if (!context || !masterGain || context.state !== 'running') return;
+
+  const start = context.currentTime + startDelay;
+  const end = start + duration;
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+
+  // A bright, breathy reed-like timbre inspired by the pepa's role in
+  // Bihu music, synthesized rather than using a recorded instrument.
+  oscillator.type = 'sawtooth';
+  oscillator.frequency.setValueAtTime(startFrequency, start);
+  oscillator.frequency.exponentialRampToValueAtTime(endFrequency, end);
+
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.exponentialRampToValueAtTime(volume, start + 0.025);
+  gain.gain.setValueAtTime(volume * 0.72, Math.max(start + 0.025, end - 0.06));
+  gain.gain.exponentialRampToValueAtTime(0.0001, end);
+
+  oscillator.connect(gain);
+  gain.connect(masterGain);
+  oscillator.start(start);
+  oscillator.stop(end + 0.03);
+}
+
 function playCountdownTone(step: number) {
   const context = getAudioContext();
   if (!context || !masterGain || !ambienceGain || context.state !== 'running') return;
 
-  // Warm ceremonial "signal" rather than a harsh electronic double-beep:
-  // low pulse + bell-like fifth + soft upper harmonic.
-  const roots = [220, 233.08, 246.94, 261.63, 293.66];
+  // Assam-inspired ceremonial palette:
+  // a restrained dhol-like pulse underneath a bright pepa-inspired call.
+  // The sound is synthesized so it remains lightweight and consistent in a
+  // browser, while drawing on the dhol + pepa energy associated with Bihu.
+  const roots = [196, 207.65, 220, 233.08, 261.63];
   const root = roots[Math.min(step, roots.length - 1)];
 
-  playTone(root, 0.42, 0, 0.13, 'sine');
-  playTone(root * 1.5, 0.58, 0.025, 0.11, 'triangle');
-  playTone(root * 2, 0.72, 0.055, 0.055, 'sine', ambienceGain);
+  // Dhol-style two-hit cadence: grounded first stroke, lighter response.
+  drumHit(0.00, root * 0.72, 0.20, 0.19, 70);
+  drumHit(0.30, root * 1.08, 0.13, 0.10, 45);
 
-  // A restrained low-frequency ceremonial pulse gives each number physical
-  // presence without becoming a drum-machine sound.
-  playTone(root / 2, 0.18, 0, 0.12, 'sine');
+  // PePa-inspired rising call creates anticipation as the countdown advances.
+  const rise = step * 12;
+  pepaCall(0.02, root * 1.25, root * 1.52 + rise, 0.30, 0.055);
+  pepaCall(0.34, root * 1.52, root * 1.88 + rise, 0.22, 0.045);
+
+  // Soft sustained fifth keeps the result ceremonial rather than sounding
+  // like a standalone folk-effect sample.
+  playTone(root * 1.5, 0.72, 0.02, 0.045, 'triangle', ambienceGain);
 }
 
 function playOpeningFanfare() {
