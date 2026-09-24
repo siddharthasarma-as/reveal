@@ -40,7 +40,8 @@ button:focus-visible, a:focus-visible {
 .hidden { display: none !important; }
 
 .launch-page {
-  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
   position: relative;
   overflow: hidden;
   background:
@@ -61,16 +62,27 @@ button:focus-visible, a:focus-visible {
 }
 
 .screen {
-  min-height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+  min-height: 100svh;
   position: relative;
+  overflow: hidden;
   display: grid;
   place-items: center;
   isolation: isolate;
 }
 
 .landing-screen {
-  padding: 70px 24px 58px;
+  padding: clamp(42px, 7vh, 70px) 24px clamp(46px, 6vh, 58px);
   text-align: center;
+}
+
+.landing-screen > * {
+  min-width: 0;
+}
+
+.landing-screen {
+  align-content: center;
 }
 
 .ambient {
@@ -100,8 +112,8 @@ button:focus-visible, a:focus-visible {
 .launch-mark {
   position: relative;
   z-index: 2;
-  width: min(320px, 58vw);
-  margin: 0 auto 22px;
+  width: min(320px, 58vw, 27svh);
+  margin: 0 auto clamp(12px, 2.5vh, 22px);
   animation: markIn .9s cubic-bezier(.2,.8,.2,1) both;
 }
 
@@ -131,8 +143,9 @@ button:focus-visible, a:focus-visible {
 .launch-content h1 {
   margin: 0;
   color: var(--navy);
-  font-size: clamp(2.8rem, 7vw, 6.8rem);
-  line-height: .9;
+  font-size: clamp(2.5rem, min(7vw, 7.2svh), 6.8rem);
+  line-height: 1;
+  padding: .04em 0 .08em;
   letter-spacing: -.065em;
   font-weight: 900;
   text-wrap: balance;
@@ -147,10 +160,10 @@ button:focus-visible, a:focus-visible {
 
 .intro {
   max-width: 730px;
-  margin: 24px auto 30px;
+  margin: clamp(12px, 2.5vh, 24px) auto clamp(16px, 3vh, 30px);
   color: #536079;
-  font-size: clamp(.95rem, 1.5vw, 1.16rem);
-  line-height: 1.6;
+  font-size: clamp(.86rem, 1.5vw, 1.16rem);
+  line-height: 1.5;
 }
 
 .launch-button {
@@ -190,7 +203,7 @@ button:focus-visible, a:focus-visible {
 }
 
 .launch-hint {
-  margin: 12px 0 0;
+  margin: clamp(7px, 1.3vh, 12px) 0 0;
   color: #8991a1;
   font-size: .72rem;
 }
@@ -198,9 +211,9 @@ button:focus-visible, a:focus-visible {
 .launch-footer, .open-footer {
   position: absolute;
   z-index: 2;
-  left: 24px;
-  right: 24px;
-  bottom: 20px;
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
+  bottom: max(12px, env(safe-area-inset-bottom));
   display: flex;
   justify-content: center;
   gap: 28px;
@@ -259,7 +272,7 @@ button:focus-visible, a:focus-visible {
 .pulse { animation: countPulse .75s cubic-bezier(.2,.8,.2,1) both; }
 
 .open-screen {
-  padding: 50px 24px 70px;
+  padding: clamp(30px, 5vh, 50px) 24px max(58px, env(safe-area-inset-bottom));
   text-align: center;
   background:
     radial-gradient(circle at 50% 44%, rgba(255,255,255,.96) 0 14%, rgba(255,247,228,.88) 35%, rgba(248,246,238,.6) 64%, transparent 78%),
@@ -277,8 +290,8 @@ button:focus-visible, a:focus-visible {
 }
 
 .open-logo {
-  width: min(310px, 55vw);
-  margin: 0 auto 18px;
+  width: min(310px, 55vw, 25svh);
+  margin: 0 auto clamp(10px, 2vh, 18px);
   animation: logoReveal .9s cubic-bezier(.2,.85,.2,1) both;
 }
 
@@ -302,8 +315,9 @@ button:focus-visible, a:focus-visible {
 .open-content h2 {
   margin: 0;
   color: var(--navy);
-  font-size: clamp(3.2rem, 8vw, 8.8rem);
-  line-height: .8;
+  font-size: clamp(3rem, min(8vw, 8svh), 8.8rem);
+  line-height: .9;
+  padding: .04em 0 .08em;
   letter-spacing: -.075em;
   font-weight: 900;
 }
@@ -322,7 +336,7 @@ button:focus-visible, a:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 13px;
-  margin: 24px 0 18px;
+  margin: clamp(12px, 2.5vh, 24px) 0 clamp(10px, 2vh, 18px);
   color: var(--green-dark);
   font-weight: 900;
   letter-spacing: .16em;
@@ -340,10 +354,10 @@ button:focus-visible, a:focus-visible {
 
 .open-copy {
   max-width: 700px;
-  margin: 0 auto 24px;
+  margin: 0 auto clamp(14px, 2.5vh, 24px);
   color: #536079;
-  font-size: clamp(.95rem, 1.5vw, 1.15rem);
-  line-height: 1.55;
+  font-size: clamp(.86rem, 1.5vw, 1.15rem);
+  line-height: 1.5;
 }
 
 .apply-button {
@@ -441,19 +455,94 @@ button:focus-visible, a:focus-visible {
 
 @media (max-width: 700px) {
   .landing-screen, .open-screen { padding-left: 18px; padding-right: 18px; }
-  .launch-mark { width: min(250px, 65vw); }
-  .launch-content h1 { font-size: clamp(2.35rem, 11vw, 4.2rem); }
-  .intro { margin-top: 18px; }
+  .launch-mark { width: min(250px, 65vw, 24svh); }
+  .launch-content h1 { font-size: clamp(2.25rem, min(11vw, 7.2svh), 4.2rem); }
+  .intro { margin-top: 12px; }
   .countdown-number { font-size: clamp(9rem, 42vw, 16rem); }
   .countdown-caption { bottom: 20%; letter-spacing: .2em; }
-  .open-logo { width: min(245px, 65vw); }
-  .open-content h2 { font-size: clamp(3rem, 15vw, 5.8rem); }
-  .open-copy { font-size: .9rem; }
+  .open-logo { width: min(245px, 65vw, 23svh); }
+  .open-content h2 { font-size: clamp(2.8rem, min(15vw, 8svh), 5.8rem); }
+  .open-copy { font-size: .88rem; }
   .launch-footer, .open-footer { font-size: .52rem; gap: 12px; }
 }
 
 @media (max-width: 420px) {
   .launch-button { min-width: 205px; min-height: 58px; }
-  .launch-mark { margin-bottom: 14px; }
+  .launch-mark { margin-bottom: 10px; }
   .launch-footer, .open-footer { left: 12px; right: 12px; }
+}
+
+@media (max-height: 760px) {
+  .landing-screen {
+    padding-top: 30px;
+    padding-bottom: 42px;
+  }
+
+  .launch-mark {
+    width: min(210px, 21svh, 58vw);
+    margin-bottom: 10px;
+  }
+
+  .launch-content h1 {
+    font-size: clamp(2.15rem, min(6.5vw, 6.2svh), 4.8rem);
+  }
+
+  .intro {
+    margin-top: 8px;
+    margin-bottom: 14px;
+    font-size: .82rem;
+    line-height: 1.35;
+    max-width: 650px;
+  }
+
+  .launch-button {
+    min-height: 54px;
+  }
+
+  .launch-hint {
+    margin-top: 6px;
+  }
+
+  .launch-footer {
+    bottom: 8px;
+  }
+}
+
+@media (max-height: 620px) {
+  .launch-mark {
+    width: min(165px, 18svh, 50vw);
+    margin-bottom: 6px;
+  }
+
+  .launch-content h1 {
+    font-size: clamp(1.9rem, min(6vw, 5.5svh), 3.8rem);
+  }
+
+  .intro {
+    display: none;
+  }
+
+  .launch-button {
+    min-height: 50px;
+  }
+
+  .launch-hint {
+    display: none;
+  }
+}
+
+@media (min-width: 701px) and (max-height: 800px) {
+  .launch-mark {
+    width: min(230px, 25svh);
+    margin-bottom: 10px;
+  }
+
+  .launch-content h1 {
+    font-size: clamp(2.7rem, min(6vw, 7svh), 5.6rem);
+  }
+
+  .intro {
+    margin-top: 12px;
+    margin-bottom: 16px;
+  }
 }
