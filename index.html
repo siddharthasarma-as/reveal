@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>North-East SEVA FIRST Innovation Challenge 2026</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <main class="stage">
+        <div id="countdown" aria-live="polite">5</div>
+        <section id="scene" class="hidden">
+          <header class="brand">
+            <img src="./public/resources/logo.png" alt="North-East SEVA FIRST Innovation Challenge 2026" />
+            <div>
+              <div class="eyebrow">Government of Assam · NESFIC 2026</div>
+              <h1>Problem Statements</h1>
+              <p>50 challenges · 10 industry · 40 department</p>
+            </div>
+          </header>
+
+          <div id="ribbon" role="button" tabindex="0" aria-label="Cut the ribbon to reveal the challenge"><span></span><span></span></div>
+          <div id="scissor-cursor" aria-hidden="true">✂</div>
+          <div id="logo-reveal" aria-hidden="true"><img src="./public/resources/logo.png" alt="" /></div>
+
+          <div id="box" aria-hidden="true">
+            <div class="lid"></div>
+            <div class="body">
+              <div class="seal">NESFIC<br><small>2026</small></div>
+            </div>
+          </div>
+
+          <section class="reveal-panel">
+            <div class="sector-strip" aria-label="Sectors and source types">
+              <div class="sector-column">
+                <span class="sector-heading">INDUSTRY</span>
+                <span>Pharmaceuticals</span>
+                <span>Oil &amp; Gas</span>
+                <span>Bioenergy</span>
+                <span>Waste Management</span>
+              </div>
+              <div class="sector-column">
+                <span class="sector-heading">INDUSTRY + DEPARTMENT</span>
+                <span>Tea Plantation</span>
+                <span>Agriculture &amp; Irrigation</span>
+                <span>Urban Infrastructure</span>
+              </div>
+              <div class="sector-column">
+                <span class="sector-heading">DEPARTMENT</span>
+                <span>Public Administration</span>
+                <span>Fishing &amp; Aquaculture</span>
+                <span>Forestry</span>
+              </div>
+              <div class="sector-column">
+                <span class="sector-heading">DEPARTMENT</span>
+                <span>Telecommunications</span>
+                <span>Human Health</span>
+                <span>Government Printing</span>
+              </div>
+            </div>
+            <div class="panel-head">
+              <div>
+                <span class="eyebrow">The challenge vault</span>
+                <h2>24 problem statements surrounding the NESFIC logo</h2>
+              </div>
+              <div class="legend">
+                <span class="pill industry">INDUSTRY · 10</span>
+                <span class="pill department">DEPARTMENT · 14</span>
+              </div>
+            </div>
+            <div class="cards-wrap">
+              <div id="cards" class="cards" aria-live="polite"></div>
+              </div>
+          </section>
+
+          <button id="replay" type="button">Replay reveal</button>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
