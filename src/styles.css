@@ -257,6 +257,10 @@ button:focus-visible, a:focus-visible {
   font-size: clamp(.8rem, 1.4vw, 1rem);
   font-weight: 900;
   letter-spacing: .3em;
+  white-space: pre-line;
+  text-align: center;
+  max-width: min(92vw, 900px);
+  line-height: 1.25;
 }
 
 .countdown-orbit {
