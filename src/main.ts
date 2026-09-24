@@ -234,7 +234,7 @@ async function start() {
       logoCell.className = 'grid-logo';
       logoCell.setAttribute('aria-hidden', 'true');
       const image = document.createElement('img');
-      image.src = './public/resources/logo.png';
+      image.src = './resources/logo.png';
       image.alt = '';
       logoCell.appendChild(image);
       cards.appendChild(logoCell);
